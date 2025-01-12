@@ -4,7 +4,7 @@ const db = require('../../database');
 
 const addNewEvent = (event, user_id, done) => {
     const sql = 'INSERT INTO events (name, description, location, start_date, close_registration, max_attendees, creator_id) VALUES (?, ?, ?, ?, ? ,?, ?)'
-    let values= [event.name, event.description, event.location, event.start_date, event.close_registration, event.max_attendees, user_id]
+    const values= [event.name, event.description, event.location, event.start_date, event.close_registration, event.max_attendees, user_id]
 
     db.run(sql, values, function(err){
         if(err) return done(err);

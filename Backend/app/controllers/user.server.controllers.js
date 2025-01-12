@@ -59,9 +59,10 @@ const login = (req, res) =>{
 const logout = (req, res) => {          //need to complete the logout function still 
     const token = req.get("X-Authorization")
 
+
     users.removeToken(token, function(err){
         if(err){
-            return res.sendStatus(401);
+            return res.sendStatus(500);
         }
         else{
             return res.sendStatus(200);

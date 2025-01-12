@@ -25,7 +25,7 @@ const createEvent = (req, res) => {
     
     events.addNewEvent(req.body, req.user_id,(err,id) =>{
         if(err){
-            console.log(err)
+            //console.log(err)
             return res.sendStatus(500);
         } else{
             return res.status(201).send({event_id: id});
@@ -154,4 +154,3 @@ module.exports = {
 }
 
 
-//test

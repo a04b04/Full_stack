@@ -1,5 +1,6 @@
 const eventServerControllers = require("../controllers/event.server.controllers.js");
 //const event = require("../controllers/user.server.controllers")
+const auth = require("../lib/authentication")
 
 module.exports = function(app){
     app.route("/events")

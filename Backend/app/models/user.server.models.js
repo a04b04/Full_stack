@@ -60,7 +60,7 @@ const getToken = (id, done) => {
             return done(err);
         }
         if(row && row.session_token){
-            return done (null, row.token)
+            return done (null, row.session_token)
         }
         else{
             return done (null, null)
