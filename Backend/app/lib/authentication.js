@@ -8,7 +8,7 @@ const isAuthenticated = (req, res, next) => {
         if (err || id === null) {
             return res.sendStatus(401);
         }
-        req.userId = userId;
+        req.userId = id;
         next();
     })
 
