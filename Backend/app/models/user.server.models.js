@@ -106,17 +106,18 @@ const removeToken = (token, done) =>{
 }
 
 const getIdFromToken = (token, done) => {
-    const sql = 'select user_id FROM users WHERE session_token=?';
 
-    db.get(sql, [token], (err, row)=> {
-        if(err){
-            return done(err);
+    const sql = 'SELECT user_id FROM users WHERE session_token=?';
+
+    db.get(sql, [token], function(err, row) {
+        if(err || !row){
+            return done(true, null);
         }
-        if(row && row.id){
-            return done (null, row.id)
-        }
+        //if(row && row.id){
+          //  return done (null, row.id)
+        //}
         else{
-            return done (null, null)
+            return done (null, row.user_id);
         }
     })
 }
