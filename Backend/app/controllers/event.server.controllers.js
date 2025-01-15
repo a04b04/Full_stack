@@ -17,7 +17,7 @@ const createEvent = (req, res) => {
     if(error) {return res.status(401).send({error_message: "check user information"});}
     let date = Date.now();
     if(req.body.start <= date){
-        return res.status(401).send({error_message: "Event start time must be in the future"})
+        return res.status(401).send({error_message: "Event start time must be in the future"})      //changed this above and below to 400 was 401
     }
     if(req.body.start <= req.body.close_registration){
         return res.status(401).send({error_message: "Registration must close before the start date"})

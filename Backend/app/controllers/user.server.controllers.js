@@ -28,35 +28,49 @@ const create_account = (req, res) => {
 
 
 const login = (req, res) =>{
+    
     const schema = Joi.object({
         email: Joi.string().required(),
         password: Joi.string().required()
     })
-    const{error} = schema.validate(req.body);
-    if(error){return res.status(400).send({error_message: "check user information"});}
 
-    users.authenticateUser(req.body.email, req.body.password, (err, id)=>{
+    if(schema.validate(req.body).error){
+        return res.status(400).send({error_message: "Invalid email or password"})
+    }
+    //const{error} = schema.validate(req.body);
+    //if(error){return res.status(400).send({error_message: "check user information"});}
+    else
+   { users.authenticateUser(req.body.email, req.body.password, (err, id)=>{
         
-        if(err === 404) return res.status(400).send({error_message: "Invalid email/passoword supplied"});
-        if (err) return res.sendStatus(500)
+        if(err) {
+            return res.status(400).send({error_message: "Invalid email/passoword supplied"});
+        }
+        //if (err) return res.sendStatus(500)
+        else{
+            users.getToken(id, (err, token) => {
+                if (err) {
+                    return res.Status(400).send({error_message: "Invalid"});
+                }
+                else{
 
-        users.getToken(id, (err, token) => {
-            if (err) return res.sendStatus(500)
-            
-            if(token){
-                return res.status(200).send({user_id: id, session_token:token})
-            }else{
-                users.setToken(id, (err, token) => {
-                    if (err) return res.sendStatus(500)
-                    return res.status(200).send({user_id: id, session_token: token});
-                });
-            }
-        });
-    })
-    
+                    if (token !== null){
+                        return res.status(200).send({user_id: id, session_token: token})
+                    }else{
+                         users.setToken(id, (err, token) => {
+                            if (err) {
+                                return res.Status(400).send({error_message: "Invalid"});
+                            }
+                            else{
+                                return res.status(200).send({user_id: id, session_token: token});
+                            }
+                        });
+                    }}
+            });
+        }});
+    }
 }
 
-const logout = (req, res) => {          //need to complete the logout function still 
+const logout = (req, res) => {              //logout function should be okay
     const token = req.get("X-Authorization")
 
 
