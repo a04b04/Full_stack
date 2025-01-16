@@ -11,7 +11,7 @@ const create_account = (req, res) => {
         first_name: Joi.string().required(),
         last_name: Joi.string().required(),
         email: Joi.string().required(),
-        password:Joi.string().min(6).max(30).pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@$%^&*(),.?":{}|<>]).+$/).required()
+        password: Joi.string().min(8).max(30).pattern(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/).required()
     });
     const{error} = schema.validate(req.body);
     if(error) {return res.status(400).send({error_message: "check user information"});}
