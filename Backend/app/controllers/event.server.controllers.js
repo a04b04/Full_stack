@@ -13,27 +13,40 @@ const createEvent = (req, res) => {
         close_registration: Joi.number().required(),
         max_attendees: Joi.number().required()
     })
-    const{error} = schema.validate(req.body);
-    if(error) {return res.status(401).send({error_message: "check user information"});}
-    let date = Date.now();
-    if(req.body.start <= date){
-        return res.status(401).send({error_message: "Event start time must be in the future"})
-    }
-    if(req.body.start <= req.body.close_registration){
-        return res.status(401).send({error_message: "Registration must close before the start date"})
-    }
-    
-    events.addNewEvent(req.body, req.user_id,(err,id) =>{
-        if(err){
-            //console.log(err)
-            return res.sendStatus(500);
-        } else{
-            return res.status(201).send({event_id: id});
-        }
-    
-    })
 
-    //return res.sendStatus(500);
+    let event = Object.assign({}, req.body);
+
+    let{error} = function(event){
+        if(schema.validate(event).error){
+            return{error: schema.validate(event).error};
+        }else{
+            return {error: null};
+        }
+    };
+
+    if(error){
+        return res.status(401).send({error_message: "check user information"});
+    }
+    //let date = Date.now();
+    //if(req.body.start <= date){
+      //  return res.status(401).send({error_message: "Event start time must be in the future"})      //changed this above and below to 400 was 401
+    //}
+    //if(req.body.start <= req.body.close_registration){
+    //    return res.status(401).send({error_message: "Registration must close before the start date"})
+    //}
+    
+    
+    else{
+        events.addNewEvent(event,(err,id) =>{
+            if(err){
+                //console.log(err)
+                return res.status(400).send({error_message: err.message});
+            }else{
+                return res.status(201).send({event_id: id});
+            }
+    
+        })
+    }   //return res.sendStatus(500);
 }
 
 const getEvent = (req, res) => {        //need to add sommat

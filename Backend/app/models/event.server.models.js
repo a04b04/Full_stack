@@ -2,14 +2,16 @@ const { func } = require('joi');
 const db = require('../../database');
 //const eventServerControllers = require('../controllers/event.server.controllers');
 
-const addNewEvent = (event, user_id, done) => {
+const addNewEvent = (event, done) => {
     const sql = 'INSERT INTO events (name, description, location, start_date, close_registration, max_attendees, creator_id) VALUES (?, ?, ?, ?, ? ,?, ?)'
-    const values= [event.name, event.description, event.location, event.start_date, event.close_registration, event.max_attendees, user_id]
+    const values= [event.name, event.description, event.location, event.start, event.close_registration, event.max_attendees, event.creator_id];
 
     db.run(sql, values, function(err){
-        if(err) return done(err);
+        if(err){
+            return done(err);
+        }
         return done(null, this.lastID);
-    })
+    });
 }
 
 const getEventDetails = (event_id, user_id, done)=>{

@@ -26,18 +26,34 @@ const adduser = (user, done) => {
 const authenticateUser = (email, password, done)=> {        //error
     const sql = 'SELECT user_id, password, salt FROM users WHERE email=?'
     db.get(sql, [email], (err, row)=> {
-        if(err) return done(err)
-        if(!row) return done(404) //if they type the wrong email
-
-        if (row.salt === null) row.salt = ''
-
-        let salt = Buffer.from(row.salt, 'hex')
-
-        if (row.password === getHash(password, salt)){
-            return done(false, row.user_id)
-        }else{
-            return done(404)
+        if(err || row === undefined){
+            return done(true)
         }
+        else{
+            if(row.user_salt == null){
+                row.user_salt = '';
+            }
+                
+            let salt = Buffer.from(row.salt,'hex');
+
+            if(row.password === getHash(password, salt)){
+                return done( null,row.user_id);
+            }
+            else{
+                return done (true);
+                }
+            }
+        //if(!row) return done(404) //if they type the wrong email
+
+        //if (row.salt === null) row.salt = ''
+
+        //let salt = Buffer.from(row.salt, 'hex')
+
+        //if (row.password === getHash(password, salt)){
+            //return done(false, row.user_id)
+        //}else{
+           // return done(404)
+        //}
     })
 }
 
@@ -56,14 +72,14 @@ const getToken = (id, done) => {
     const sql = 'SELECT session_token FROM users WHERE user_id = ?';
 
     db.get(sql, [id], (err, row)=> {
-        if(err){
-            return done(err);
+        if(err || !row){
+            return done(true, null);
         }
-        if(row && row.session_token){
-            return done (null, row.session_token)
-        }
+        //if(row && row.session_token){
+          //  return done (null, row.session_token)
+        //}
         else{
-            return done (null, null)
+            return done (null, row.session_token);
         }
     })
 }
@@ -73,7 +89,10 @@ const setToken = (id, done) => {
     const sql = 'UPDATE users SET session_token=? WHERE user_id =?'
 
     db.run(sql, [token, id], (err)=> {
-        return done(err, token)
+        if(err){
+            return done(err);
+        }
+        return done(null, token);
     })
 }
 
