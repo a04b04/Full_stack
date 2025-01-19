@@ -148,11 +148,64 @@ const deleteEvent = (req, res) => {
 
 
 
+/*const searchEvent = (req, res) => {
+
+    const filters = {
+        q: req.query.q || null,
+        status: req.query.status || null,
+        limit: parseInt(req.query.limit, 10) || 20, 
+        offset: parseInt(req.query.offset, 10) || 0, 
+    };
+
+    
+    const validStatuses = ['MY_EVENTS', 'ATTENDING', 'OPEN', 'ARCHIVE'];
+    if (filters.status && !validStatuses.includes(filters.status)) {
+        return res.status(400).send({ error_message: "Invalid status value" });
+    }
+
+    
+    let token = req.get('X-Authorization');
+    
+    if (filters.status === 'MY_EVENTS' || filters.status === 'ATTENDING') {
+        userServerModels.getIdFromToken(token, (err, user_id) => {
+            if (err || !user_id) {
+                return res.status(401).send({ error_message: "Invalid or missing token" });
+            }
+
+            filters.user_id = user_id; 
+            performSearch(filters, res);
+        });
+    } else {
+        performSearch(filters, res);
+    }
+};
+*/
+
+
+//const performSearch = (filters, res) => {
+  //  events.searchEvent(filters, (err, results) => {
+  //      if (err) {
+  //          return res.status(500).send({ error_message: "An error occurred during the search" });
+  /*      }
+        if (results.length === 0) {
+            return res.status(404).send({ error_message: "No events found" });
+        }
+        return res.status(200).send(results);
+    });
+
+    //return res.sendStatus(500);
+}*/
+
+
 const searchEvent = (req, res) => {
-    return res.sendStatus(500);
+    events.search((err, rows) => {
+        if(err){
+            return res.status(400).send({error_message: err});
+        }else{
+            return res.status(200).json(rows.slice(0,20));
+        }
+    })
 }
-
-
 
 
 

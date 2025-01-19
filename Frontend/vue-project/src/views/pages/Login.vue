@@ -12,11 +12,13 @@
         <label for="password">Password: </label>
         <input type="password" name="password" v-model="password" />
         <div v-show="submitted && !password">Password is required</div>
-        <h2>{{ email + " " + password }}</h2>
-        <button>Login</button>
+        <!--<h2>{{ email + " " + password }}</h2>--> <!--this line was used to help testing-->
+        <button >Login</button>
+        
 
         <br /> <br />
     </form>
+    <button @click="ButtonLogout">Logout</button>
     <div class="create-account">
         <router-link to = "/CreateAccount">Create Account</router-link>
     </div>
@@ -53,6 +55,17 @@ import { postService } from '@/services/posts.service';
                 })
                     
                 //fill in with more code to deal with if login function aint working=
+            },
+
+            ButtonLogout(){
+                postService.logOut()
+                .then(response =>{
+                    console.log("Logout successful:", response);
+                })
+                .catch(error => {
+                    console.error("Logout failed: ", error);
+                    this.error = "Logout failed, please try again."
+                })
             }
         }
     }

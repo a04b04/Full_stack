@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import { postService } from "../../services/posts.service";
+
 export default{
     data(){
         return{
@@ -25,7 +27,14 @@ export default{
     },
     methods: {
     handlesubmit(){
-        window.location.reload();
+        postService.registerNewUser(this.email, this.password)
+        .then(response =>{
+            console.log("Account created successfully:", response);
+        })
+        .catch(error => {
+            console.error("Failed to create account:", error);
+        });
+        
     }
 }
 };
