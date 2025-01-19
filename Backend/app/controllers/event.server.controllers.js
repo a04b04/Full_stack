@@ -157,13 +157,15 @@ const searchEvent = (req, res) => {
 
 
 
+
 module.exports = {
     createEvent: createEvent,
     getEvent: getEvent,
     updateEvent: updateEvent,
     AttendEvent: AttendEvent,
     deleteEvent: deleteEvent,
-    searchEvent: searchEvent
+    searchEvent: searchEvent,
+    
 }
 
 

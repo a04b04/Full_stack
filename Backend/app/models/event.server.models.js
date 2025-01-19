@@ -161,6 +161,8 @@ const searchEvent = (filters, done) => {
 
 
 
+
+
 module.exports = {
     addNewEvent: addNewEvent,
     getEventDetails: getEventDetails,
